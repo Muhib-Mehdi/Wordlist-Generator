@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Interactive Quantum Coinflip and Bloch Sphere visualization — experiment with qubit parameters, measure outcomes, and explore quantum concepts.">
+    <meta name="theme-color" content="#000000">
+    <title>Quantum Whirl — Interactive Qubit Explorer</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext y='14' font-size='14'%3E%F0%9F%94%A5%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+    <!-- Project header -->
+    <header class="site-header" role="banner" aria-hidden="false">
+        <nav class="site-nav" role="navigation" aria-label="Main Navigation">
+            <span class="nav-title">Quantum Whirl</span>
+            <div class="nav-links">
+                <a href="README.md" class="nav-link">README</a>
+                <a href="LICENSE" class="nav-link">License</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Particle Canvas Background -->
+    <canvas id="particleCanvas"></canvas>
+    
+    <!-- Main Content -->
+    <div class="container" id="mainContainer">
+        <h1 class="title">Quantum Whirl</h1>
+        <button class="main-button" id="exploreButton" data-cursor-hover>Explore</button>
+    </div>
+    
+    <!-- Quantum Flip Page -->
+    <div class="quantum-page" id="quantumPage" style="display: none;">
+        <div class="quantum-layout">
+            <!-- Left Section: Quantum Coinflip -->
+            <div class="coinflip-section">
+                <h2 class="section-title">Quantum Coinflip</h2>
+                <div class="coinflip-container">
+                    <div class="quantum-coin" id="quantumCoin">
+                        <div class="coin-face coin-heads">H</div>
+                        <div class="coin-face coin-tails">T</div>
+                        <div class="superposition-overlay" id="superpositionOverlay"></div>
+                    </div>
+                    <div class="coinflip-controls">
+                        <div class="click-hint">Click the coin to measure quantum state</div>
+                        <div class="probability-display">
+                            <div class="prob-item">
+                                <span class="prob-label">|0⟩ Probability:</span>
+                                <span class="prob-value" id="prob0">50%</span>
+                            </div>
+                            <div class="prob-item">
+                                <span class="prob-label">|1⟩ Probability:</span>
+                                <span class="prob-value" id="prob1">50%</span>
+                            </div>
+                        </div>
+                        <div class="result-display" id="resultDisplay"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Top Section: Quantum Parameters -->
+            <div class="parameters-section">
+                <h2 class="section-title">Quantum Parameters</h2>
+                <div class="params-container">
+                    <div class="param-group">
+                        <label for="theta">θ (Theta) - Polar Angle</label>
+                        <input type="range" id="theta" min="0" max="180" value="90" step="1">
+                        <span class="param-value" id="thetaValue">90°</span>
+                    </div>
+                    <div class="param-group">
+                        <label for="phi">φ (Phi) - Azimuthal Angle</label>
+                        <input type="range" id="phi" min="0" max="360" value="0" step="1">
+                        <span class="param-value" id="phiValue">0°</span>
+                    </div>
+                    <div class="param-group">
+                        <label for="alpha">α (Alpha) - |0⟩ Amplitude</label>
+                        <input type="number" id="alpha" min="0" max="1" value="0.707" step="0.001">
+                        <span class="param-value" id="alphaValue">0.707</span>
+                    </div>
+                    <div class="param-group">
+                        <label for="beta">β (Beta) - |1⟩ Amplitude</label>
+                        <input type="number" id="beta" min="0" max="1" value="0.707" step="0.001">
+                        <span class="param-value" id="betaValue">0.707</span>
+                    </div>
+                    <div class="param-group">
+                        <label for="phase">Phase (δ)</label>
+                        <input type="range" id="phase" min="0" max="360" value="0" step="1">
+                        <span class="param-value" id="phaseValue">0°</span>
+                    </div>
+                    <div class="param-group">
+                        <label for="entanglement">Entanglement Factor</label>
+                        <input type="range" id="entanglement" min="0" max="100" value="0" step="1">
+                        <span class="param-value" id="entanglementValue">0%</span>
+                    </div>
+                    <div class="param-group">
+                        <label for="decoherence">Decoherence Rate (γ)</label>
+                        <input type="range" id="decoherence" min="0" max="100" value="0" step="1">
+                        <span class="param-value" id="decoherenceValue">0%</span>
+                    </div>
+                    <div class="param-group">
+                        <label for="coherence">Coherence Time (τ)</label>
+                        <input type="range" id="coherence" min="0" max="100" value="100" step="1">
+                        <span class="param-value" id="coherenceValue">100</span>
+                    </div>
+                    <div class="param-group">
+                        <label for="fidelity">Quantum Fidelity (F)</label>
+                        <input type="range" id="fidelity" min="0" max="100" value="100" step="1">
+                        <span class="param-value" id="fidelityValue">100%</span>
+                    </div>
+                    <div class="quantum-info">
+                        <div class="info-row">
+                            <span class="info-label">Expectation Value ⟨Z⟩:</span>
+                            <span class="info-value" id="expectationZ">0.000</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Von Neumann Entropy (S):</span>
+                            <span class="info-value" id="entropy">0.000</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Purity (Tr(ρ²)):</span>
+                            <span class="info-value" id="purity">1.000</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Quantum Overlap:</span>
+                            <span class="info-value" id="overlap">1.000</span>
+                        </div>
+                    </div>
+                    <button class="reset-button" id="resetButton" data-cursor-hover>Reset to Default</button>
+                </div>
+            </div>
+            
+            <!-- Right Bottom Section: Bloch Sphere -->
+            <div class="bloch-section">
+                <h2 class="section-title">Bloch Sphere</h2>
+                <div class="bloch-container" id="blochContainer">
+                    <canvas id="blochCanvas"></canvas>
+                    <div class="bloch-info">
+                        <div class="info-item">
+                            <span>State: |ψ⟩</span>
+                        </div>
+                        <div class="info-item">
+                            <span id="blochState">|+⟩</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Computation Display Section -->
+        <div class="computation-section" id="computationSection">
+            <h3 class="computation-title">Quantum Measurement Calculation</h3>
+            <div class="computation-content" id="computationContent">
+                <div class="computation-step">
+                    <span class="step-number">1</span>
+                    <div class="step-details">
+                        <div class="step-label">Initial Quantum State</div>
+                        <div class="step-formula">|ψ⟩ = α|0⟩ + β|1⟩</div>
+                        <div class="step-values" id="initialState">α = 0.707, β = 0.707</div>
+                    </div>
+                </div>
+                <div class="computation-step">
+                    <span class="step-number">2</span>
+                    <div class="step-details">
+                        <div class="step-label">Base Probabilities</div>
+                        <div class="step-formula">P(|0⟩) = |α|², P(|1⟩) = |β|²</div>
+                        <div class="step-values" id="baseProbs">P(|0⟩) = 0.500, P(|1⟩) = 0.500</div>
+                    </div>
+                </div>
+                <div class="computation-step">
+                    <span class="step-number">3</span>
+                    <div class="step-details">
+                        <div class="step-label">Quantum Effects</div>
+                        <div class="step-formula">P' = P + ε - δ, adjusted by fidelity F</div>
+                        <div class="step-values" id="quantumEffects">Calculating...</div>
+                    </div>
+                </div>
+                <div class="computation-step">
+                    <span class="step-number">4</span>
+                    <div class="step-details">
+                        <div class="step-label">Measurement</div>
+                        <div class="step-formula">r < P(|0⟩) → |0⟩, else → |1⟩</div>
+                        <div class="step-values" id="measurement">Ready to measure...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <button class="back-button" id="backButton" data-cursor-hover>← Back</button>
+    </div>
+    
+    <!-- Custom Cursor -->
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-trail" id="cursorTrail"></div>
+    
+    <!-- Ripple Effect Container -->
+    <div class="ripple-container" id="rippleContainer"></div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js" defer></script>
+    <script>
+        // Make OrbitControls available globally if needed
+        if (typeof THREE !== 'undefined' && typeof THREE.OrbitControls === 'undefined') {
+            // Fallback: we'll implement basic controls ourselves
+        }
+    </script>
+    <script src="script.js" defer></script>
+    <script src="quantum.js" defer></script>
+</body>
+</html>
+

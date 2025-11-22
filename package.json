@@ -1,0 +1,11 @@
+{
+  "name": "quantum-whirl",
+  "version": "0.1.0",
+  "description": "Interactive quantum coinflip and Bloch sphere explorer",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server . -p 8080"
+  },
+  "author": "",
+  "license": "MIT"
+}
