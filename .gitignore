@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+wordlist.txt
+custom_wordlist.txt
+debug_wordlist.txt
+*.spec
+build/
+dist/
+.vscode/
