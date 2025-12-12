@@ -7,3 +7,5 @@ debug_wordlist.txt
 build/
 dist/
 .vscode/
+
+debug_search.py
