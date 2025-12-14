@@ -111,7 +111,7 @@ graph LR
     C -->|Click Coin| E[Measure Qubit]
     D --> F[Bloch Sphere Updates]
     E --> G[Collapse Wavefunction]
-    G --> H[Show Result |0⟩ or |1⟩]
+    G --> H["Show Result |0⟩ or |1⟩"]
 ```
 
 1.  **Enter the Lab:** Click "Explore" on the landing page.
@@ -242,3 +242,4 @@ Contributions are what make the open-source community such an amazing place to l
 [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/muhib-mehdi)
 
 </div>
+
